@@ -1,47 +1,48 @@
 from flask_restful import Resource, reqparse
-from models.usuario import UserModel
-class init(Resource):
-    atributos = reqparse.RequestParser()
-    atributos.add_argument('name', type=str, required=True, help="The field 'name' cannot be left blank.")
-    atributos.add_argument('imageUrl', type=str, required=True, help="The field 'imageUrl' cannot be left blank.")
-    atributos.add_argument('userName', type=str, required=True, help="The field 'userName' cannot be left blank.")
-    atributos.add_argument('email', type=str, required=True, help="The field 'email' cannot be left blank.")
-    atributos.add_argument('password', type=str, required=True, help="The field 'password' cannot be left blank.")
+from models.usuario import userModel
+class receive_atribute(Resource):
+    atributes = reqparse.RequestParser()
+    atributes.add_argument('name', type=str, required=True, help="The field 'name' cannot be left blank.")
+    atributes.add_argument('imageUrl', type=str, required=True, help="The field 'imageUrl' cannot be left blank.")
+    atributes.add_argument('userName', type=str, required=True, help="The field 'userName' cannot be left blank.")
+    atributes.add_argument('email', type=str, required=True, help="The field 'email' cannot be left blank.")
+    atributes.add_argument('password', type=str, required=True, help="The field 'password' cannot be left blank.")
 
-class User(Resource):
+class user(Resource):
    def get(self):
-       return {'user': [user.json() for user in UserModel.query.all()]}
+       return {'user': [user.json() for user in userModel.query.all()]}
 
-class UserDelete(Resource):
+class userDelete(Resource):
     def delete(self, user_id):
-        user = UserModel.find_user(user_id)
+        user = userModel.find_user(user_id)
         if user:
             user.delete_user()
             return {'message': 'User deleted.'}
         return {'message': 'User not found.'}, 404
 
-class UserRegister(Resource):
-    # /cadastro
+class userRegister(Resource):
     def post(self):
-        dados = init.atributos.parse_args()
+        data = receive_atribute.atributes.parse_args()
 
-        if UserModel.find_by_email(dados['email']):
-            return {"message": "The email '{}' already exists.".format(dados['email'])}
+        if userModel.find_by_email(data['email']):
+            return {
+                        "message": "The email '{}' already exists.".format(data['email'])
+                   }
 
-        user = UserModel(**dados)
+        user = userModel(**data)
         user.save_user()
-        return {'message': 'User created successfully!'}, 201 # Created
+        return {'message': 'User created successfully!'}, 201 
     
-class UserUpdate(Resource):    
+class userUpdate(Resource):    
     def put(self, user_id):
-        dados = init.atributos.parse_args()
-        user = UserModel(**dados)
+        data = receive_atribute.atributes.parse_args()
+        user = userModel(**data)
 
-        user_encontrado = UserModel.find_user(user_id)
-        if user_encontrado:
-            user_encontrado.update_user(**dados)
-            user_encontrado.save_user()
-            return user_encontrado.json(), 200
+        user_found = userModel.find_user(user_id)
+        if user_found:
+            user_found.update_user(**data)
+            user_found.save_user()
+            return user_found.json(), 200
         user.save_user()
         return user.json(), 201    
 
