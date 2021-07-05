@@ -1,3 +1,4 @@
 __pycache__
 .ambvir
-.venv.git
+.venv
+*.db
