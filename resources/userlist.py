@@ -1,6 +1,6 @@
 from flask_restful import Resource
-from models.usuario import UserModel
-from resources.usuario import receive_attribute, is_valid
+from models.user import UserModel
+from resources.user import receive_attribute, is_valid
 
 class UserList(Resource):
    def get(self):

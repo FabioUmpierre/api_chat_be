@@ -9,6 +9,7 @@ class UserModel(db.Model):
     userName = db.Column(db.String(40))
     email = db.Column(db.String(40))
     password = db.Column(db.String(40))
+    # contacts = db.relationship('Contacts', backref='user', lazy=True) 
 
     def __init__(self,name,imageUrl,userName,email,password):
         self.name = name

@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from models.usuario import UserModel
+from models.user import UserModel
 
 class UserSearch(Resource):
     def get(self,name):

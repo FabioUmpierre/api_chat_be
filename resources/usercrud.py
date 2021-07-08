@@ -1,6 +1,6 @@
-from flask_restful import Resource, reqparse
-from models.usuario import UserModel
-from resources.usuario import receive_attribute
+from flask_restful import Resource
+from models.user import UserModel
+from resources.user import receive_attribute
 
 class UserCrud(Resource):
     def get(self, id):
