@@ -49,9 +49,8 @@ class UserModel(db.Model):
         db.session.delete(self)
         db.session.commit()
     
-    def update_user (self, name, imageUrl, userName, email, password):
-        self.name = name
-        self.imageUrl = imageUrl
-        self.userName = userName
-        self.email = email
-        self.password = password 
+    def update_user(self, **kwargs):
+        self.name = kwargs.get('name', self.name)
+        self.imageUrl = kwargs.get('imageUrl', self.imageUrl)
+        self.userName = kwargs.get('userName', self.userName)
+        self.email = kwargs.get('email', self.email)

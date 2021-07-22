@@ -4,7 +4,7 @@ from resources.user import receive_attribute, is_valid
 
 class UserList(Resource):
    def get(self):
-       return {'user': [user.json() for user in UserModel.query.all()]}
+       return [user.json() for user in UserModel.query.all()]
    
    def post(self):
         payload = receive_attribute.atributes.parse_args()     
@@ -31,4 +31,4 @@ class UserList(Resource):
         
         user = UserModel(**payload)
         user.save_user()
-        return {'message: user created':f'{user.json()}'}, 201    
+        return user.json(), 201

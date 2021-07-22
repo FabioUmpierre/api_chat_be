@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from models.user import UserModel
-from resources.user import receive_attribute
+from flask import request, jsonify
 
 class UserCrud(Resource):
     def get(self, id):
@@ -17,13 +17,13 @@ class UserCrud(Resource):
         return {'message': 'User not found.'}, 404
     
     def patch(self,id):
-        payload = receive_attribute.atributes.parse_args()
-        user = UserModel(**payload)
-
         user_found = UserModel.find_user(id)
         if user_found:
-            user_found.update_user(**payload)
+            user_found.update_user(**request.json)
             user_found.save_user()
             return user_found.json(), 200
-        user.save_user()
-        return user.json(), 201    
+
+        return jsonify({
+            'message': 'Usuário não encontrado'
+        }), 404
+  
