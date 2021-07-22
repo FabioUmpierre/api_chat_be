@@ -6,7 +6,14 @@ class ContactSearch(Resource):
         result = ContactsModel.select_all_user_contacts(user_id)
         return result
 
-class ContactCreate(Resource):   
+class ContactCreate(Resource):  
+    def delete(self, userId, contactUserId):        
+        deleted = ContactsModel.delete_contact(userId, contactUserId)
+        deleted_user_contact = ContactsModel.delete_contact(contactUserId, userId)
+        if deleted or deleted_user_contact:
+            return {'message': 'contact relationship deleted'}
+        return {'message': 'contact not found.'}, 404  
+ 
     def post(self,userId,contactUserId):
         result = ContactsModel.verify_chat_exists(userId,contactUserId)
         if result:
@@ -22,11 +29,3 @@ class ContactCreate(Resource):
         contact = ContactsModel(contactUserId,userId)
         contact.save_contact()
         return {'message': 'contact added is succefully!'}  
-
-class ContactDelete(Resource):
-    def delete(self,id):
-        contacts = ContactsModel.find_contact(id)
-        if contacts:
-            contacts.delete_contact()
-            return {'message': 'contact deleted.'}
-        return {'message': 'contact not found.'}, 404

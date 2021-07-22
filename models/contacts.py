@@ -13,7 +13,10 @@ class ContactsModel(db.Model):
         self.contactUserId = contactUserId
         
     def json(self):
-        return {k: str(v) for k, v in self.__dict__.items()}
+        return {
+            k: str(v) for k, v in self.__dict__.items()
+            if k != '_sa_instance_state'
+        }
 
     @classmethod
     def select_all_user_contacts(cls, user_id):
@@ -38,9 +41,16 @@ class ContactsModel(db.Model):
         db.session.add(self)
         db.session.commit()
     
-    def delete_contact(self):
-        db.session.delete(self)
-        db.session.commit()    
+    @classmethod
+    def delete_contact(cls, userId, contactUserId):
+        contact_row = cls.query.filter(
+            ContactsModel.userId == userId,
+            ContactsModel.contactUserId == contactUserId
+        ).first()
+        if contact_row:
+            db.session.delete(contact_row)
+            db.session.commit()
+            return True
 
     def verify_chat_exists(field1, field2):
         result = db.session.query(
@@ -50,6 +60,3 @@ class ContactsModel(db.Model):
         ).all()
         if len(result) > 0:
             return {"message": "contact already exists"}
-        
-
-  

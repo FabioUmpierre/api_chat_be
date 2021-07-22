@@ -3,7 +3,7 @@ from flask_restful import Api
 from resources.usersearch import UserSearch
 from resources.userlist import UserList
 from resources.usercrud import UserCrud
-from resources.contacts import ContactCreate, ContactSearch, ContactDelete
+from resources.contacts import ContactCreate, ContactSearch
 from database import db
 
 app = Flask(__name__)
@@ -20,9 +20,6 @@ api.add_resource(UserCrud, '/user/<int:id>')
 api.add_resource(UserSearch, '/user/search/<string:name>')  
 api.add_resource(ContactSearch, '/user/<int:user_id>/contacts')
 api.add_resource(ContactCreate, '/user/<int:userId>/contact/<int:contactUserId>')
-api.add_resource(ContactDelete, '/contactsdelete/<int:id>')
-
-       
 
 db.init_app(app)
 
